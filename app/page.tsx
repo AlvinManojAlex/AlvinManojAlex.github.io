@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -15,16 +16,35 @@ export default function Home() {
       <section className="min-h-screen flex items-center justify-center px-6 md:px-12 lg:px-16">
         <div className="max-w-5xl w-full">
           <div className={`transition-all duration-1000 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <h1 className="text-4xl md:text-5xl lg:text-8xl font-light tracking-tight mb-6 text-zinc-900 leading-none">
-              Alvin Manoj Alex
-            </h1>
-            <p className="text-base sm:text-lg md:text-2xl text-zinc-500 font-light leading-relaxed max-w-2xl">
-              Software developer crafting solutions for real problems
-            </p>
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8 md:gap-12">
+              {/* Profile picture - shows first on mobile, last on desktop */}
+              <div className="shrink-0 order-first md:order-last mx-auto md:mx-0">
+                <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden border-2 border-zinc-200">
+                  <Image
+                    src="/profile.jpeg"
+                    alt="Alvin Manoj Alex"
+                    width={192}
+                    height={192}
+                    className="w-full h-full object-cover"
+                    priority
+                  />
+                </div>
+              </div>
+              
+              {/* Text content */}
+              <div className="flex-1 text-center md:text-left">
+                <h1 className="text-4xl md:text-5xl lg:text-8xl font-light tracking-tight mb-6 text-zinc-900 leading-none">
+                  Alvin Manoj Alex
+                </h1>
+                <p className="text-base sm:text-lg md:text-2xl text-zinc-500 font-light leading-relaxed max-w-2xl mx-auto md:mx-0">
+                  Software developer crafting solutions for real problems
+                </p>
+              </div>
+            </div>
           </div>
           
           <div className={`mt-16 transition-all duration-1000 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="flex gap-6 md:gap-8 text-sm tracking-wide">
+            <div className="flex gap-6 md:gap-8 text-sm tracking-wide justify-center md:justify-start">
               <a href="#about" className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300">About</a>
               <a href="#work" className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300">Work</a>
               <a href="#skills" className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300">Skills</a>
