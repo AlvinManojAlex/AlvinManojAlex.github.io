@@ -1,65 +1,202 @@
-import Image from "next/image";
+'use client';
+
+import { useEffect, useState } from 'react';
 
 export default function Home() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="min-h-screen bg-stone-50">
+      {/* Hero Section */}
+      <section className="min-h-screen flex items-center justify-center px-6 md:px-12 lg:px-16">
+        <div className="max-w-5xl w-full">
+          <div className={`transition-all duration-1000 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-light tracking-tight mb-6 text-zinc-900 leading-none">
+              Alvin Manoj Alex
+            </h1>
+            <p className="text-xl md:text-2xl text-sinze-200 font-light leading-relaxed max-w-2xl">
+              Software developer
+            </p>
+          </div>
+          
+          <div className={`mt-16 transition-all duration-1000 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className="flex gap-8 text-sm tracking-wide">
+              <a href="#about" className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300">About</a>
+              <a href="#work" className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300">Work</a>
+              <a href="#skills" className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300">Skills</a>
+              <a href="#contact" className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300">Contact</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className="py-24 md:py-32 px-6 md:px-12 lg:px-16 border-t border-zinc-200">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-xs uppercase tracking-widest text-zinc-400 mb-12">About</h2>
+          <div className="grid md:grid-cols-2 gap-16">
+            <div>
+              <p className="text-lg md:text-xl text-zinc-900 font-light leading-relaxed mb-6">
+                I'm a software developer with a passion for building thoughtful, user-centered applications.
+                My approach combines technical precision with design sensitivity.
+              </p>
+              <p className="text-lg md:text-xl text-zinc-600 font-light leading-relaxed">
+                Currently focused on full-stack development, working with modern web technologies
+                to create seamless digital experiences.
+              </p>
+            </div>
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-sm uppercase tracking-widest text-zinc-400 mb-3">Location</h3>
+                <p className="text-lg text-zinc-900">San Francisco, CA</p>
+              </div>
+              <div>
+                <h3 className="text-xs uppercase tracking-widest text-zinc-400 mb-3">Experience</h3>
+                <p className="text-lg text-zinc-900">5+ years</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Projects Section */}
+      <section id="work" className="py-24 md:py-32 px-6 md:px-12 bg-white border-t border-zinc-200">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-xs uppercase tracking-widest text-zinc-400 mb-16">Selected Work</h2>
+          <div className="space-y-24">
+            {[
+              {
+                title: "Project Alpha",
+                description: "A full-stack web application for team collaboration",
+                tags: ["React", "Node.js", "PostgreSQL"]
+              },
+              {
+                title: "Project Beta",
+                description: "Mobile-first e-commerce platform with real-time analytics",
+                tags: ["Next.js", "TypeScript", "Tailwind"]
+              },
+              {
+                title: "Project Gamma",
+                description: "AI-powered content management system",
+                tags: ["Python", "FastAPI", "OpenAI"]
+              }
+            ].map((project, index) => (
+              <div 
+                key={index}
+                className="group cursor-pointer"
+              >
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 mb-6">
+                  <h3 className="text-3xl md:text-4xl font-light text-zinc-900 group-hover:text-zinc-600 transition-colors duration-300">
+                    {project.title}
+                  </h3>
+                  <span className="text-sm text-zinc-400">202{4 - index}</span>
+                </div>
+                <p className="text-lg text-zinc-600 font-light leading-relaxed mb-8">
+                  {project.description}
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {project.tags.map((tag, i) => (
+                    <span 
+                      key={i}
+                      className="text-xs uppercase tracking-wider text-zinc-400 px-4 py-2 border border-zinc-200 bg-stone-50"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Skills Section */}
+      <section id="skills" className="py-24 md:py-32 px-6 md:px-12 border-t border-zinc-200">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-xs uppercase tracking-widest text-zinc-400 mb-16">Skills & Technologies</h2>
+          <div className="grid md:grid-cols-3 gap-16">
+            <div>
+              <h3 className="text-xs uppercase tracking-widest text-zinc-400 mb-8">Frontend</h3>
+              <ul className="space-y-4 text-lg text-zinc-900 font-light">
+                <li>React / Next.js</li>
+                <li>TypeScript</li>
+                <li>Tailwind CSS</li>
+                <li>Three.js</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xs uppercase tracking-widest text-zinc-400 mb-8">Backend</h3>
+              <ul className="space-y-4 text-lg text-zinc-900 font-light">
+                <li>Node.js</li>
+                <li>Python</li>
+                <li>PostgreSQL</li>
+                <li>REST APIs</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xs uppercase tracking-widest text-zinc-400 mb-8">Tools</h3>
+              <ul className="space-y-4 text-lg text-zinc-900 font-light">
+                <li>Git / GitHub</li>
+                <li>Docker</li>
+                <li>AWS</li>
+                <li>Figma</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-24 md:py-32 px-6 md:px-12 bg-white border-t border-zinc-200">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-xs uppercase tracking-widest text-zinc-400 mb-16">Get In Touch</h2>
+          <div className="space-y-12">
+            <p className="text-2xl md:text-3xl lg:text-4xl font-light text-zinc-900 leading-relaxed max-w-3xl">
+              I'm always interested in hearing about new projects and opportunities.
+            </p>
+            <div className="flex flex-col md:flex-row gap-8 text-lg">
+              <a 
+                href="mailto:alvinmanoj02@gmail.com" 
+                className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300 inline-flex items-center gap-3 group"
+              >
+                <span className="text-sm text-zinc-400">Email</span>
+                <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+              </a>
+              <a 
+                href="https://github.com/AlvinManojAlex" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300 inline-flex items-center gap-3 group"
+              >
+                <span className="text-sm text-zinc-400">GitHub</span>
+                <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+              </a>
+              <a 
+                href="https://www.linkedin.com/in/alvin-manoj-alex/" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300 inline-flex items-center gap-3 group"
+              >
+                <span className="text-sm text-zinc-400">LinkedIn</span>
+                <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 px-6 md:px-12 lg:px-16 border-t border-zinc-200">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-sm text-zinc-400">
+            © 2026 Alvin Manoj Alex. All rights reserved.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </footer>
     </div>
   );
 }
