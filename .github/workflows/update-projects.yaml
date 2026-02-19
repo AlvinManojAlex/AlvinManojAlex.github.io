@@ -25,11 +25,14 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Fetch GitHub repositories
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         # Fetch your public repositories using the GitHub API
-        curl -H "Accept: application/vnd.github.v3+json" \
-              "https://api.github.com/users/AlvinManojAlex/repos?sort=updated&per_page=100" \
-              > repos.json
+        curl -H "Authorization: token $GITHUB_TOKEN" \
+             -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/users/AlvinManojAlex/repos?sort=updated&per_page=100" \
+            > repos.json
 
         # Filter for repos with 'featured' topic only
         cat repos.json | jq '[.[] | {
