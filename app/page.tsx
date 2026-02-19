@@ -5,6 +5,38 @@ import Image from 'next/image';
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
+  const [projects, setProjects] = useState([
+    {
+      id: 1,
+      name: "Project Alpha",
+      description: "A full-stack web application for team collaboration",
+      html_url: "https://github.com/AlvinManojAlex/project-alpha",
+      stargazers_count: 12,
+      updated_at: "2024-03-15",
+      topics: ["react", "nodejs", "postgresql"],
+      language: "JavaScript"
+    },
+    {
+      id: 2,
+      name: "Project Beta",
+      description: "Mobile-first e-commerce platform with real-time analytics",
+      html_url: "https://github.com/AlvinManojAlex/project-beta",
+      stargazers_count: 8,
+      updated_at: "2023-11-20",
+      topics: ["nextjs", "typescript", "tailwind"],
+      language: "TypeScript"
+    },
+    {
+      id: 3,
+      name: "Project Gamma",
+      description: "AI-powered content management system",
+      html_url: "https://github.com/AlvinManojAlex/project-gamma",
+      stargazers_count: 15,
+      updated_at: "2022-08-10",
+      topics: ["python", "fastapi", "openai"],
+      language: "Python"
+    }
+  ]);
 
   useEffect(() => {
     setMounted(true);
@@ -86,45 +118,53 @@ export default function Home() {
         <div className="max-w-5xl mx-auto">
           <h2 className="text-xs uppercase tracking-widest text-zinc-400 mb-10 md:mb-16">Selected Work</h2>
           <div className="space-y-14 md:space-y-24">
-            {[
-              {
-                title: "Project Alpha",
-                description: "A full-stack web application for team collaboration",
-                tags: ["React", "Node.js", "PostgreSQL"]
-              },
-              {
-                title: "Project Beta",
-                description: "Mobile-first e-commerce platform with real-time analytics",
-                tags: ["Next.js", "TypeScript", "Tailwind"]
-              },
-              {
-                title: "Project Gamma",
-                description: "AI-powered content management system",
-                tags: ["Python", "FastAPI", "OpenAI"]
-              }
-            ].map((project, index) => (
-              <div 
-                key={index}
-                className="group cursor-pointer"
+            {projects.map((project, index) => (
+              <div
+                key={project.id || index}
+                className='group cursor-pointer'
               >
-                <div className="flex items-start justify-between gap-4 mb-4">
-                  <h3 className="text-2xl md:text-4xl font-light text-zinc-900 group-hover:text-zinc-600 transition-colors duration-300">
-                    {project.title}
-                  </h3>
-                  <span className="text-sm text-zinc-400 shrink-0 mt-1 md:mt-2">202{4 - index}</span>
+                <div className='flex items-start justify-between gap-4 mb-4'>
+                  <div className='flex-1'>
+                    <h3 className='text-2xl md:text-4xl font-light text-zinc-900 group-hover:text-zinc-600 transition-colors duration-300 mb-2'>
+                      {project.name}
+                    </h3>
+                    {project.html_url && (
+                      <a
+                        href={project.html_url}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='text-sm text-zinc-400 hover:text-zinc-600 transition-colors inline-flex items-center gap-1'
+                      >
+                        View on GitHub
+                      </a>
+                    )}
+                  </div>
+                  <div className='shrink-0 flex flex-col items-end gap-2'>
+                    {project.updated_at && (
+                      <span className='text-xs text-zinc-400'>
+                        {new Date(project.updated_at).getFullYear()}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <p className="tetx-base md:text-lg text-zinc-600 font-light leading-relaxed mb-6">
-                  {project.description}
+                <p className='text-base md:text-lg text-zinc-600 font-light leading-relaxed mb-6'> 
+                  {project.description || "No description provided"}
                 </p>
-                <div className="flex flex-wrap gap-2 md:gap-3">
-                  {project.tags.map((tag, i) => (
-                    <span 
-                      key={i}
-                      className="text-xs uppercase tracking-wider text-zinc-400 px-3 py-1.5 md:px-4 md:py-2 border border-zinc-200 bg-stone-50"
-                    >
-                      {tag}
+                <div className='flex flex-wrap gap-2 md:gap-3'>
+                  {project.topics && project.topics.length > 0 ? (
+                    project.topics.map((topic, i) => (
+                      <span
+                        key={i}
+                        className='text-xs uppercase tracking-wider text-zinc-400 px-3 py-1.5 md:px-4 md:py-2 border border-zinc bg-stone-50'
+                      >
+                        {topic}
+                      </span>
+                    ))
+                  ) : project.language ? (
+                    <span className='text-xs uppercase tracking-wider text-zinc-400 px-3 py-1.5 md:px-4 md:py-2 border border-zinc bg-stone-50'>
+                      {project.language}
                     </span>
-                  ))}
+                  ) : null}
                 </div>
               </div>
             ))}
