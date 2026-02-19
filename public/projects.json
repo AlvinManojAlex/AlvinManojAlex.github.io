@@ -1,0 +1,15 @@
+[
+  {
+    "id": 1126128753,
+    "name": "ICSK_StudentShuffler",
+    "description": "This repository contains the script to automatically shuffle all the students uniformly into their next grade.",
+    "html_url": "https://github.com/AlvinManojAlex/ICSK_StudentShuffler",
+    "updated_at": "2026-02-19T17:49:29Z",
+    "topics": [
+      "featured",
+      "python3",
+      "tkinter"
+    ],
+    "language": "Python"
+  }
+]
