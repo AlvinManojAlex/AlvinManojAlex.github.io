@@ -1,10 +1,10 @@
 [
   {
     "id": 1126128753,
-    "name": "ICSK_StudentShuffler",
-    "description": "This repository contains the script to automatically shuffle all the students uniformly into their next grade.",
-    "html_url": "https://github.com/AlvinManojAlex/ICSK_StudentShuffler",
-    "updated_at": "2026-02-19T17:49:29Z",
+    "name": "ICSK_Student_Shuffler",
+    "description": "A GUI-based application that enables teachers to automate the student class assignment process. The system imports student data from Excel spreadsheets and distributes students into separate classes using a randomized algorithm that maintains uniformity across class characteristics.",
+    "html_url": "https://github.com/AlvinManojAlex/ICSK_Student_Shuffler",
+    "updated_at": "2026-02-20T02:18:39Z",
     "topics": [
       "featured",
       "python3",
