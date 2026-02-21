@@ -26,11 +26,14 @@ export default function Home() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // determining base path for the website
+  const basePath = process.env.NODE_ENV === 'production' ? '/Automated-Portfolio' : '';
+  
   useEffect(() => {
     setMounted(true);
 
     // Fetch projects from public/projects.json
-    fetch('/projects.json')
+    fetch(`${basePath}/projects.json`)
       .then(res => res.json())
       .then(data => {
         setProjects(data);
@@ -53,7 +56,7 @@ export default function Home() {
               <div className="shrink-0 order-first md:order-last mx-auto md:mx-0">
                 <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden border-2 border-zinc-200">
                   <Image
-                    src="/profile.jpeg"
+                    src={`${basePath}/profile.jpeg`}
                     alt="Alvin Manoj Alex"
                     width={192}
                     height={192}
