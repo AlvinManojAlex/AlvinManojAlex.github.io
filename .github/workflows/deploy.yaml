@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-    wordkflow_dispatch:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -34,7 +34,7 @@ jobs:
       - name: Build with Next.js
         run: npm run build
 
-      - name: Upload artiface
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
