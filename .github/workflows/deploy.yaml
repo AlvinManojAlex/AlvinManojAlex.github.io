@@ -1,11 +1,14 @@
 name: Deploy to GitHub Pages
 
 on:
-  workflow_run:
-    workflows: ["Update Projects from GitHub"]
-    types:
-      - completed
-  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+     - "public/projects.json"
+     - "src/**"
+     - "app/**"
+     - "pages/**"
+     - "components/**"
 
 permissions:
   contents: read
