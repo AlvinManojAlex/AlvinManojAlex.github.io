@@ -14,6 +14,19 @@
     "language": null
   },
   {
+    "id": 1126128753,
+    "name": "ICSK_Student_Shuffler",
+    "description": "A GUI-based application that enables teachers to automate the student class assignment process. The system imports student data from Excel spreadsheets and distributes students into separate classes using a randomized algorithm that maintains uniformity across class characteristics.",
+    "html_url": "https://github.com/AlvinManojAlex/ICSK_Student_Shuffler",
+    "created_at": "2026-01-01T07:14:00Z",
+    "topics": [
+      "featured",
+      "python3",
+      "tkinter"
+    ],
+    "language": "Python"
+  },
+  {
     "id": 1104088089,
     "name": "Runtime_SBOM_Generator",
     "description": "A script that generates SBOM for a project that will capture dynamically invoked libraries using Linux strace calls.",
