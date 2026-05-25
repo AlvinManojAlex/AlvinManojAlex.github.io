@@ -198,12 +198,12 @@ export default function Home() {
                           [index]: !prev[index]
                         }))
                       }
-                      className="mt-2 mb-6 text-sm text-zinc-400 hover:text-zinc-600 transition-colors"
+                      className="mb-3 text-sm text-zinc-400 hover:text-zinc-600 transition-colors"
                     >
                       {expanded[index] ? "View less" : "View more"}
                     </button>
                   )}
-                  <div className="flex flex-wrap gap-2 md:gap-3 md:mt-2">
+                  <div className="flex flex-wrap gap-2 md:gap-3 md:mt-3 mt-3">
                     {project.topics && project.topics.length > 0 ? (
                       project.topics
                         .filter(topic => topic !== 'featured')
