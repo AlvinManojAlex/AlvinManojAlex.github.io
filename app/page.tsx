@@ -25,14 +25,20 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  
+  const [darkMode, setDarkMode] = useState(false);
+
   // useState variables for checking overflow of project description
   const [expanded, setExpanded] = useState<Record<number, boolean>>({});
   const [isOverflowing, setIsOverflowing] = useState<Record<number, boolean>>({});
   const descRefs = useRef<Record<number, HTMLParagraphElement | null>>({});
-  
+
   useEffect(() => {
     setMounted(true);
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = saved ? saved === 'dark' : prefersDark;
+    setDarkMode(isDark);
+    document.documentElement.classList.toggle('dark', isDark);
 
     // Fetch projects from public/projects.json
     fetch('/projects.json')
@@ -46,6 +52,13 @@ export default function Home() {
         setLoading(false);
       });
   }, []);
+
+  function toggleDarkMode() {
+    const next = !darkMode;
+    setDarkMode(next);
+    document.documentElement.classList.toggle('dark', next);
+    localStorage.setItem('theme', next ? 'dark' : 'light');
+  }
 
   useEffect(() => {
     const newOverflow: Record<number, boolean> = {};
@@ -73,7 +86,28 @@ export default function Home() {
   }, [projects]);
 
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="min-h-screen bg-stone-50 dark:bg-zinc-950 transition-colors duration-300">
+      {/* Dark mode toggle */}
+      <button
+        onClick={toggleDarkMode}
+        aria-label="Toggle dark mode"
+        className="fixed top-5 right-5 z-50 w-10 h-10 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:border-zinc-400 dark:hover:border-zinc-500 transition-colors duration-300 shadow-sm"
+      >
+        {darkMode ? (
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        )}
+      </button>
+
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center px-6 md:px-12 lg:px-16">
         <div className="max-w-5xl w-full">
@@ -81,7 +115,7 @@ export default function Home() {
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8 md:gap-12">
               {/* Profile picture - shows first on mobile, last on desktop */}
               <div className="shrink-0 order-first md:order-last mx-auto md:mx-0">
-                <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden border-2 border-zinc-200">
+                <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden border-2 border-zinc-200 dark:border-zinc-700">
                   <Image
                     src="/profile.jpeg"
                     alt="Alvin Manoj Alex"
@@ -95,10 +129,10 @@ export default function Home() {
               
               {/* Text content */}
               <div className="flex-1 text-center md:text-left">
-                <h1 className="text-4xl md:text-5xl lg:text-8xl font-light tracking-tight mb-6 text-zinc-900 leading-none">
+                <h1 className="text-4xl md:text-5xl lg:text-8xl font-light tracking-tight mb-6 text-zinc-900 dark:text-zinc-50 leading-none">
                   Alvin Manoj Alex
                 </h1>
-                <p className="text-base sm:text-lg md:text-2xl text-zinc-500 font-light leading-relaxed max-w-2xl mx-auto md:mx-0">
+                <p className="text-base sm:text-lg md:text-2xl text-zinc-500 dark:text-zinc-400 font-light leading-relaxed max-w-2xl mx-auto md:mx-0">
                   Software developer crafting solutions for real problems
                 </p>
               </div>
@@ -107,37 +141,37 @@ export default function Home() {
           
           <div className={`mt-16 transition-all duration-1000 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="flex gap-6 md:gap-8 text-sm tracking-wide justify-center md:justify-start">
-              <a href="#about" className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300">About</a>
-              <a href="#work" className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300">Work</a>
-              <a href="#skills" className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300">Skills</a>
-              <a href="#experience" className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300">Experience</a>
-              <a href="#contact" className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300">Contact</a>
+              <a href="#about" className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300">About</a>
+              <a href="#work" className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300">Work</a>
+              <a href="#skills" className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300">Skills</a>
+              <a href="#experience" className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300">Experience</a>
+              <a href="#contact" className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300">Contact</a>
             </div>
           </div>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-16 md:py-32 px-6 md:px-12 lg:px-16 border-t border-zinc-200">
+      <section id="about" className="py-16 md:py-32 px-6 md:px-12 lg:px-16 border-t border-zinc-200 dark:border-zinc-800">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-xs uppercase tracking-widest text-zinc-400 mb-8 md:mb-12">About</h2>
+          <h2 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-8 md:mb-12">About</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 md:gap-16">
             <div>
-              <p className="text-base md:text-xl text-zinc-900 font-light leading-relaxed mb-6">
+              <p className="text-base md:text-xl text-zinc-900 dark:text-zinc-100 font-light leading-relaxed mb-6">
                 I’m a software developer focused on building secure, reliable, and scalable applications. I enjoy understanding how systems work end-to-end, from architecture to user experience, and applying that perspective to create thoughtful, user-centered solutions.
               </p>
-              <p className="text-base md:text-xl text-zinc-900 font-light leading-relaxed">
+              <p className="text-base md:text-xl text-zinc-900 dark:text-zinc-100 font-light leading-relaxed">
                 Currently, I work across the full stack with modern web technologies, continuously learning and experimenting with new tools that solve meaningful problems. I’m driven by curiosity and a desire to contribute to technology through impactful code and collaboration.
               </p>
             </div>
             <div className="flex flex-row md:flex-col gap-8 md:space-y-8">
               <div>
-                <h3 className="text-xs uppercase tracking-widest text-zinc-400 mb-2 md:mb-3 pt-8 md:pt-0">Location</h3>
-                <p className="text-base md:text-lg text-zinc-900">New York City, NY</p>
+                <h3 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-2 md:mb-3 pt-8 md:pt-0">Location</h3>
+                <p className="text-base md:text-lg text-zinc-900 dark:text-zinc-100">New York City, NY</p>
               </div>
               <div>
-                <h3 className="text-xs uppercase tracking-widest text-zinc-400 mb-2 md:mb-3 pt-8 md:pt-0">Experience</h3>
-                <p className="text-base md:text-lg text-zinc-900">1 year</p>
+                <h3 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-2 md:mb-3 pt-8 md:pt-0">Experience</h3>
+                <p className="text-base md:text-lg text-zinc-900 dark:text-zinc-100">1 year</p>
               </div>
             </div>
           </div>
@@ -145,37 +179,37 @@ export default function Home() {
       </section>
 
       {/* Projects Section */}
-      <section id="work" className="py-16 md:py-32 px-6 md:px-12 bg-white border-t border-zinc-200">
+      <section id="work" className="py-16 md:py-32 px-6 md:px-12 bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-xs uppercase tracking-widest text-zinc-400 mb-10 md:mb-16">Selected Work</h2>
-          
+          <h2 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-10 md:mb-16">Selected Work</h2>
+
           {loading ? (
-            <div className="text-center text-zinc-400">Loading projects...</div>
+            <div className="text-center text-zinc-400 dark:text-zinc-500">Loading projects...</div>
           ) : projects.length === 0 ? (
-            <div className="text-center text-zinc-400">No projects found</div>
+            <div className="text-center text-zinc-400 dark:text-zinc-500">No projects found</div>
           ) : (
             <div className="space-y-14 md:space-y-24">
               {projects.map((project, index) => (
-                <div 
+                <div
                   key={project.id}
                   className="group cursor-pointer"
                 >
                   <div className="flex items-start justify-between gap-4 mb-4">
                     <div className="flex-1">
-                      <h3 className="text-2xl md:text-4xl font-light text-zinc-900 group-hover:text-zinc-600 transition-colors duration-300 mb-2">
+                      <h3 className="text-2xl md:text-4xl font-light text-zinc-900 dark:text-zinc-50 group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors duration-300 mb-2">
                         {formatProjectName(project.name)}
                       </h3>
-                      <a 
+                      <a
                         href={project.html_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-zinc-400 hover:text-zinc-600 transition-colors inline-flex items-center gap-1"
+                        className="text-sm text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors inline-flex items-center gap-1"
                       >
                         View on GitHub →
                       </a>
                     </div>
                     <div className="shrink-0 flex flex-col items-end gap-2">
-                      <span className="text-xs text-zinc-400">
+                      <span className="text-xs text-zinc-400 dark:text-zinc-500">
                         {new Date(project.created_at).getFullYear()}
                       </span>
                     </div>
@@ -184,7 +218,7 @@ export default function Home() {
                     ref={(el) => {
                       descRefs.current[index] = el;
                     }}
-                    className={`text-base md:text-lg text-zinc-600 font-light leading-relaxed ${
+                    className={`text-base md:text-lg text-zinc-600 dark:text-zinc-400 font-light leading-relaxed ${
                       expanded[index] ? '' : 'line-clamp-5'
                     }`}
                   >
@@ -198,7 +232,7 @@ export default function Home() {
                           [index]: !prev[index]
                         }))
                       }
-                      className="mb-3 text-sm text-zinc-400 hover:text-zinc-600 transition-colors"
+                      className="mb-3 text-sm text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
                     >
                       {expanded[index] ? "View less" : "View more"}
                     </button>
@@ -208,15 +242,15 @@ export default function Home() {
                       project.topics
                         .filter(topic => topic !== 'featured')
                         .map((topic, i) => (
-                          <span 
+                          <span
                             key={i}
-                            className="text-xs uppercase tracking-wider text-zinc-400 px-3 py-1.5 md:px-4 md:py-2 border border-zinc-200 bg-stone-50"
+                            className="text-xs uppercase tracking-wider text-zinc-400 dark:text-zinc-500 px-3 py-1.5 md:px-4 md:py-2 border border-zinc-200 dark:border-zinc-700 bg-stone-50 dark:bg-zinc-800"
                           >
                             {topic}
                           </span>
                         ))
                     ) : project.language ? (
-                      <span className="text-xs uppercase tracking-wider text-zinc-400 px-3 py-1.5 md:px-4 md:py-2 border border-zinc-200 bg-stone-50">
+                      <span className="text-xs uppercase tracking-wider text-zinc-400 dark:text-zinc-500 px-3 py-1.5 md:px-4 md:py-2 border border-zinc-200 dark:border-zinc-700 bg-stone-50 dark:bg-zinc-800">
                         {project.language}
                       </span>
                     ) : null}
@@ -229,67 +263,67 @@ export default function Home() {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-16 md:py-32 px-6 md:px-12 lg:px-16 border-t border-zinc-200">
+      <section id="skills" className="py-16 md:py-32 px-6 md:px-12 lg:px-16 border-t border-zinc-200 dark:border-zinc-800">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-xs uppercase tracking-widest text-zinc-400 mb-10 md:mb-16">Skills & Technologies</h2>
+          <h2 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-10 md:mb-16">Skills & Technologies</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-16">
             <div>
-              <h3 className="text-xs uppercase tracking-widest text-zinc-400 mb-5 md:mb-8">Languages</h3>
-              <ul className="space-y-3 md:space-y-4 text-base text-zinc-900 font-light">
+              <h3 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-5 md:mb-8">Languages</h3>
+              <ul className="space-y-3 md:space-y-4 text-base text-zinc-900 dark:text-zinc-100 font-light">
                 <li>Python</li>
                 <li>Java</li>
                 <li>C / C++</li>
               </ul>
             </div>
-            
+
             <div>
-              <h3 className="text-xs uppercase tracking-widest text-zinc-400 mb-5 md:mb-8">Frontend</h3>
-              <ul className="space-y-3 md:space-y-4 text-base text-zinc-900 font-light">
+              <h3 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-5 md:mb-8">Frontend</h3>
+              <ul className="space-y-3 md:space-y-4 text-base text-zinc-900 dark:text-zinc-100 font-light">
                 <li>React / Next.js</li>
                 <li>React Native</li>
                 <li>Node.js</li>
               </ul>
             </div>
-            
+
             <div>
-              <h3 className="text-xs uppercase tracking-widest text-zinc-400 mb-5 md:mb-8">Backend & Data</h3>
-              <ul className="space-y-3 md:space-y-4 text-base text-zinc-900 font-light">
+              <h3 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-5 md:mb-8">Backend & Data</h3>
+              <ul className="space-y-3 md:space-y-4 text-base text-zinc-900 dark:text-zinc-100 font-light">
                 <li>REST APIs</li>
                 <li>Data Pipelines</li>
                 <li>Apache Spark</li>
               </ul>
             </div>
-            
+
             <div>
-              <h3 className="text-xs uppercase tracking-widest text-zinc-400 mb-5 md:mb-8">Databases</h3>
-              <ul className="space-y-3 md:space-y-4 text-base text-zinc-900 font-light">
+              <h3 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-5 md:mb-8">Databases</h3>
+              <ul className="space-y-3 md:space-y-4 text-base text-zinc-900 dark:text-zinc-100 font-light">
                 <li>MySQL</li>
                 <li>MongoDB</li>
                 <li>Data Management</li>
               </ul>
             </div>
-            
+
             <div>
-              <h3 className="text-xs uppercase tracking-widest text-zinc-400 mb-5 md:mb-8">AI & ML</h3>
-              <ul className="space-y-3 md:space-y-4 text-base text-zinc-900 font-light">
+              <h3 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-5 md:mb-8">AI & ML</h3>
+              <ul className="space-y-3 md:space-y-4 text-base text-zinc-900 dark:text-zinc-100 font-light">
                 <li>Machine Learning</li>
                 <li>Deep Learning</li>
                 <li>PyTorch</li>
               </ul>
             </div>
-            
+
             <div>
-              <h3 className="text-xs uppercase tracking-widest text-zinc-400 mb-5 md:mb-8">DevOps & Tools</h3>
-              <ul className="space-y-3 md:space-y-4 text-base text-zinc-900 font-light">
+              <h3 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-5 md:mb-8">DevOps & Tools</h3>
+              <ul className="space-y-3 md:space-y-4 text-base text-zinc-900 dark:text-zinc-100 font-light">
                 <li>Git / GitHub</li>
                 <li>Docker</li>
                 <li>AWS</li>
               </ul>
             </div>
-            
+
             <div className="md:col-span-2 lg:col-span-1">
-              <h3 className="text-xs uppercase tracking-widest text-zinc-400 mb-5 md:mb-8">Methodologies</h3>
-              <ul className="space-y-3 md:space-y-4 text-base text-zinc-900 font-light">
+              <h3 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-5 md:mb-8">Methodologies</h3>
+              <ul className="space-y-3 md:space-y-4 text-base text-zinc-900 dark:text-zinc-100 font-light">
                 <li>OOP & Design Patterns</li>
                 <li>Agile / Scrum</li>
                 <li>A/B Testing</li>
@@ -300,9 +334,9 @@ export default function Home() {
       </section>
       
       {/* Experience section */}
-      <section id="experience" className="py-16 md:py-32 px-6 md:px-12 lg:px-16 bg-white border-t border-zinc-200">
+      <section id="experience" className="py-16 md:py-32 px-6 md:px-12 lg:px-16 bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-xs uppercase tracking-widest text-zinc-400 mb-10 md:mb-16">Experience</h2>
+          <h2 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-10 md:mb-16">Experience</h2>
           <div className="space-y-14 md:space-y-24">
                 {[
                   {
@@ -336,22 +370,22 @@ export default function Home() {
                   <div key={index} className="group">
                     <div className="flex items-start justify-between gap-4 mb-4">
                       <div className="flex-1">
-                        <h3 className="text-2xl md:text-4xl font-light text-zinc-900 mb-2">
+                        <h3 className="text-2xl md:text-4xl font-light text-zinc-900 dark:text-zinc-50 mb-2">
                           {job.company}
                         </h3>
-                        <p className="text-base md:text-lg text-zinc-500 font-light">
+                        <p className="text-base md:text-lg text-zinc-500 dark:text-zinc-400 font-light">
                           {job.role}
                         </p>
                       </div>
-                      <span className="text-sm text-zinc-400 shrink-0 mt-1 md:mt-2">
+                      <span className="text-sm text-zinc-400 dark:text-zinc-500 shrink-0 mt-1 md:mt-2">
                         {job.period}
                       </span>
                     </div>
                     
                     <ul className="space-y-3 mb-6">
                       {job.description.map((point, i) => (
-                        <li key={i} className="text-base md:text-lg text-zinc-600 font-light leading-relaxed flex gap-3">
-                          <span className="text-zinc-400 shrink-0">•</span>
+                        <li key={i} className="text-base md:text-lg text-zinc-600 dark:text-zinc-400 font-light leading-relaxed flex gap-3">
+                          <span className="text-zinc-400 dark:text-zinc-500 shrink-0">•</span>
                           <span>{point}</span>
                         </li>
                       ))}
@@ -363,37 +397,37 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-16 md:py-32 px-6 md:px-12 lg:px-16 border-t border-zinc-200">
+      <section id="contact" className="py-16 md:py-32 px-6 md:px-12 lg:px-16 border-t border-zinc-200 dark:border-zinc-800">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-xs uppercase tracking-widest text-zinc-400 mb-10 md:mb-16">Get In Touch</h2>
+          <h2 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-10 md:mb-16">Get In Touch</h2>
           <div className="space-y-8 md:space-y-12">
-            <p className="text-xl sm:text-2xl md:text-4xl font-light text-zinc-900 leading-relaxed max-w-3xl">
+            <p className="text-xl sm:text-2xl md:text-4xl font-light text-zinc-900 dark:text-zinc-100 leading-relaxed max-w-3xl">
               I'm always interested in hearing about new projects and opportunities.
             </p>
             <div className="flex flex-col md:flex-row gap-5 md:gap-8">
-              <a 
-                href="mailto:alvinmanoj02@gmail.com" 
-                className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300 inline-flex items-center gap-3 group"
+              <a
+                href="mailto:alvinmanoj02@gmail.com"
+                className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300 inline-flex items-center gap-3 group"
               >
-                <span className="text-sm text-zinc-400">Email</span>
+                <span className="text-sm text-zinc-400 dark:text-zinc-500">Email</span>
                 <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
               </a>
-              <a 
-                href="https://github.com/AlvinManojAlex" 
+              <a
+                href="https://github.com/AlvinManojAlex"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300 inline-flex items-center gap-3 group"
+                className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300 inline-flex items-center gap-3 group"
               >
-                <span className="text-sm text-zinc-400">GitHub</span>
+                <span className="text-sm text-zinc-400 dark:text-zinc-500">GitHub</span>
                 <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
               </a>
-              <a 
-                href="https://www.linkedin.com/in/alvin-manoj-alex/" 
+              <a
+                href="https://www.linkedin.com/in/alvin-manoj-alex/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-zinc-900 hover:text-zinc-600 transition-colors duration-300 inline-flex items-center gap-3 group"
+                className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300 inline-flex items-center gap-3 group"
               >
-                <span className="text-sm text-zinc-400">LinkedIn</span>
+                <span className="text-sm text-zinc-400 dark:text-zinc-500">LinkedIn</span>
                 <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
               </a>
             </div>
@@ -402,9 +436,9 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-10 px-6 md:px-12 lg:px-16 border-t bg-white border-zinc-200">
+      <footer className="py-10 px-6 md:px-12 lg:px-16 border-t bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
         <div className="max-w-5xl mx-auto">
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm text-zinc-400 dark:text-zinc-500">
             © 2026 Alvin Manoj Alex. All rights reserved.
           </p>
         </div>
