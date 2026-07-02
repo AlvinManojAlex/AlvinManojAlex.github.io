@@ -26,6 +26,10 @@ export default function Home() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
+  const [activeTopics, setActiveTopics] = useState<string[]>([]);
+  const [topicQuery, setTopicQuery] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const comboRef = useRef<HTMLDivElement>(null);
 
   // useState variables for checking overflow of project description
   const [expanded, setExpanded] = useState<Record<number, boolean>>({});
@@ -59,6 +63,34 @@ export default function Home() {
     document.documentElement.classList.toggle('dark', next);
     localStorage.setItem('theme', next ? 'dark' : 'light');
   }
+
+  function toggleTopic(topic: string) {
+    setActiveTopics(prev =>
+      prev.includes(topic) ? prev.filter(t => t !== topic) : [...prev, topic]
+    );
+  }
+
+  const allTopics = Array.from(
+    new Set(projects.flatMap(p => p.topics || []))
+  ).filter(t => t !== 'featured').sort();
+
+  const visibleProjects = activeTopics.length === 0
+    ? projects.filter(p => p.topics?.includes('featured'))
+    : projects.filter(p => p.topics?.some(t => activeTopics.includes(t)));
+
+  const filteredTopics = allTopics.filter(
+    t => !activeTopics.includes(t) && t.toLowerCase().includes(topicQuery.toLowerCase())
+  );
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (comboRef.current && !comboRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   useEffect(() => {
     const newOverflow: Record<number, boolean> = {};
@@ -183,13 +215,88 @@ export default function Home() {
         <div className="max-w-5xl mx-auto">
           <h2 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-10 md:mb-16">Selected Work</h2>
 
+          {!loading && allTopics.length > 0 && (
+            <div ref={comboRef} className="relative mb-10 md:mb-16">
+              <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-3">
+                <button
+                  onClick={() => setActiveTopics([])}
+                  className={`rounded-full text-xs uppercase tracking-wider px-3 py-1.5 md:px-4 md:py-2 border transition-colors duration-300 ${
+                    activeTopics.length === 0
+                      ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 border-zinc-900 dark:border-zinc-100'
+                      : 'border-zinc-200 dark:border-zinc-700 bg-stone-50 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 hover:border-zinc-400 dark:hover:border-zinc-500'
+                  }`}
+                >
+                  Featured
+                </button>
+                {activeTopics.map(topic => (
+                  <button
+                    key={topic}
+                    onClick={() => toggleTopic(topic)}
+                    className="rounded-full text-xs uppercase tracking-wider px-3 py-1.5 md:px-4 md:py-2 border border-zinc-900 dark:border-zinc-100 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 transition-colors duration-300 inline-flex items-center gap-2"
+                  >
+                    {topic}
+                    <span aria-hidden="true">×</span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="relative">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 pointer-events-none"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input
+                  type="text"
+                  value={topicQuery}
+                  onChange={e => {
+                    setTopicQuery(e.target.value);
+                    setDropdownOpen(true);
+                  }}
+                  onFocus={() => setDropdownOpen(true)}
+                  placeholder="Search topics..."
+                  className="w-full rounded-full text-sm pl-10 pr-4 py-2 border border-zinc-200 dark:border-zinc-700 bg-stone-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-500 transition-colors"
+                />
+              </div>
+
+              {dropdownOpen && filteredTopics.length > 0 && (
+                <div className="absolute z-10 mt-1 w-full max-h-56 overflow-y-auto rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-sm">
+                  {filteredTopics.map(topic => (
+                    <button
+                      key={topic}
+                      onClick={() => {
+                        toggleTopic(topic);
+                        setTopicQuery('');
+                      }}
+                      className="block w-full text-left text-xs uppercase tracking-wider px-4 py-2 text-zinc-600 dark:text-zinc-400 hover:bg-stone-50 dark:hover:bg-zinc-800 transition-colors"
+                    >
+                      {topic}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {loading ? (
             <div className="text-center text-zinc-400 dark:text-zinc-500">Loading projects...</div>
           ) : projects.length === 0 ? (
             <div className="text-center text-zinc-400 dark:text-zinc-500">No projects found</div>
+          ) : visibleProjects.length === 0 ? (
+            <div className="text-center text-zinc-400 dark:text-zinc-500">No projects match the selected filters</div>
           ) : (
             <div className="space-y-14 md:space-y-24">
-              {projects.map((project, index) => (
+              {visibleProjects.map((project, index) => (
                 <div
                   key={project.id}
                   className="group cursor-pointer"
