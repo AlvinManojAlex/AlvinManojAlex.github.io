@@ -33,7 +33,7 @@ jobs:
             created_at: .created_at,
             topics: .topics,
             language: .language
-          } | select(.topics | index("featured"))]' repos.json > public/projects.json
+          } | select(.topics | length > 0)]' repos.json > public/projects.json
 
       - name: Commit and push if changed
         run: |
