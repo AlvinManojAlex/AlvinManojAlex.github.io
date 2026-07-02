@@ -277,6 +277,7 @@ export default function Home() {
                       onClick={() => {
                         toggleTopic(topic);
                         setTopicQuery('');
+                        setDropdownOpen(false);
                       }}
                       className="block w-full text-left text-xs uppercase tracking-wider px-4 py-2 text-zinc-600 dark:text-zinc-400 hover:bg-stone-50 dark:hover:bg-zinc-800 transition-colors"
                     >
