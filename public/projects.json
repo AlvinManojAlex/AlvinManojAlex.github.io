@@ -1,5 +1,83 @@
 [
   {
+    "id": 1284532740,
+    "name": "Pulse-x-ABI-Hackathon",
+    "description": "A rule-based pipeline that decides which skilled-nursing-facility patients are billable to Medicare Part B for wound care, extracting wound details from clinical notes and assessments, and routing each patient to auto-accept, flag for review, or reject with a plain-English reason.",
+    "html_url": "https://github.com/AlvinManojAlex/Pulse-x-ABI-Hackathon",
+    "created_at": "2026-06-30T00:51:51Z",
+    "topics": [
+      "fastapi",
+      "postgresql",
+      "python",
+      "react"
+    ],
+    "language": null
+  },
+  {
+    "id": 1264591775,
+    "name": "Multithreaded_Log_Processor",
+    "description": "Multithreaded C++ log analytics engine featuring mmap-based I/O, thread pools, profiling-driven optimizations, and scalable parallel processing.",
+    "html_url": "https://github.com/AlvinManojAlex/Multithreaded_Log_Processor",
+    "created_at": "2026-06-10T02:43:33Z",
+    "topics": [
+      "cpp",
+      "multi-threading"
+    ],
+    "language": "C++"
+  },
+  {
+    "id": 1262305044,
+    "name": "suicide_squad",
+    "description": "A battle royale 2D game developed with Phaser and backend served by SpacetimeDB.",
+    "html_url": "https://github.com/AlvinManojAlex/suicide_squad",
+    "created_at": "2026-06-07T20:44:22Z",
+    "topics": [
+      "phaser",
+      "spacetimedb",
+      "vercel"
+    ],
+    "language": null
+  },
+  {
+    "id": 1260954496,
+    "name": "scrabblebot",
+    "description": "Scrabble-style auction game for AI bots, built on SpacetimeDB.",
+    "html_url": "https://github.com/AlvinManojAlex/scrabblebot",
+    "created_at": "2026-06-06T04:11:57Z",
+    "topics": [
+      "spacetimedb",
+      "typescript"
+    ],
+    "language": "TypeScript"
+  },
+  {
+    "id": 1227447699,
+    "name": "SBSE_Project",
+    "description": "This project focuses on automating and optimizing the task of codebase refactoring and cleanup, which is a time consuming software engineering activity.",
+    "html_url": "https://github.com/AlvinManojAlex/SBSE_Project",
+    "created_at": "2026-05-02T17:40:27Z",
+    "topics": [
+      "python",
+      "refactoring",
+      "search-based-software-engineering"
+    ],
+    "language": "Python"
+  },
+  {
+    "id": 1224211939,
+    "name": "RefactorBench",
+    "description": "This repository is a curated collection of code files intentionally designed for refactoring tasks. It serves as a dataset for evaluating and improving automated code refactoring techniques, including scripts, tools, and AI-based approaches.",
+    "html_url": "https://github.com/AlvinManojAlex/RefactorBench",
+    "created_at": "2026-04-29T04:11:36Z",
+    "topics": [
+      "code-smells",
+      "refactoring",
+      "search-based-software-engineering",
+      "software-engineering"
+    ],
+    "language": "Python"
+  },
+  {
     "id": 1207527970,
     "name": "spark-hack-CompassNYC",
     "description": "Privacy-first, fully local AI for navigating NYC social services. Runs Qwen 2.5 7B on-device (Acer GN100) with a hybrid RAG pipeline (policy embeddings + NYC Open Data) to determine eligibility for SNAP, Medicaid, and HRA Cash Assistance, providing benefit estimates, documentation requirements, and next steps with zero cloud dependency.",
@@ -28,6 +106,19 @@
     "language": null
   },
   {
+    "id": 1159630670,
+    "name": "AlvinManojAlex.github.io",
+    "description": "This is my portfolio site which is automatically updated with my latest projects using a CI/CD pipeline that retrieves data from the GitHub REST API.",
+    "html_url": "https://github.com/AlvinManojAlex/AlvinManojAlex.github.io",
+    "created_at": "2026-02-17T00:43:25Z",
+    "topics": [
+      "ci-cd",
+      "rest-api",
+      "typescript"
+    ],
+    "language": "TypeScript"
+  },
+  {
     "id": 1158695741,
     "name": "Schedule.ai",
     "description": "A terminal based personal task scheduler that uses Groq's LLM API to parse task descriptions, resolves optimal calendar slots and schedules the result via Google Calendar API.",
@@ -51,8 +142,21 @@
     "created_at": "2026-01-01T07:14:00Z",
     "topics": [
       "featured",
-      "python3",
+      "python",
       "tkinter"
+    ],
+    "language": "Python"
+  },
+  {
+    "id": 1106782243,
+    "name": "photo-album-webapp",
+    "description": "Cloud Computing assignment involving Lex, ElasticSearch, and Rekognition.",
+    "html_url": "https://github.com/AlvinManojAlex/photo-album-webapp",
+    "created_at": "2025-11-29T23:35:30Z",
+    "topics": [
+      "aws",
+      "aws-lex",
+      "rekognition"
     ],
     "language": "Python"
   },
@@ -72,6 +176,56 @@
     "language": "Python"
   },
   {
+    "id": 1062002587,
+    "name": "xv6-os",
+    "description": "This repository contains the assignment work done with xv6-os",
+    "html_url": "https://github.com/AlvinManojAlex/xv6-os",
+    "created_at": "2025-09-22T17:11:01Z",
+    "topics": [
+      "c",
+      "os",
+      "xv6-os"
+    ],
+    "language": "C"
+  },
+  {
+    "id": 1034666300,
+    "name": "Tensorflow-Model-RCE",
+    "description": "This is a PoC for creating a malicious ML model using Tensorflow.",
+    "html_url": "https://github.com/AlvinManojAlex/Tensorflow-Model-RCE",
+    "created_at": "2025-08-08T19:14:29Z",
+    "topics": [
+      "ml",
+      "reverse-shell"
+    ],
+    "language": "Python"
+  },
+  {
+    "id": 948279606,
+    "name": "CTF-Writeups",
+    "description": "This repository contains my writeups for the CTF challenges that I have solved.",
+    "html_url": "https://github.com/AlvinManojAlex/CTF-Writeups",
+    "created_at": "2025-03-14T03:38:45Z",
+    "topics": [
+      "ctf-solutions",
+      "ctf-writeups"
+    ],
+    "language": null
+  },
+  {
+    "id": 942345216,
+    "name": "LLM-Package-Hallucination",
+    "description": "This repository contains the codebase for the PoC of LLM package hallucination and associated vulnerabilties.",
+    "html_url": "https://github.com/AlvinManojAlex/LLM-Package-Hallucination",
+    "created_at": "2025-03-04T00:58:49Z",
+    "topics": [
+      "llm-hallucination",
+      "poc",
+      "python3"
+    ],
+    "language": "Python"
+  },
+  {
     "id": 929513956,
     "name": "Swiper-No-Swiping",
     "description": "A chrome extension that can be used for identifying PIIs (Personally Identifiable Information) in sensitive documents before uploading onto an AI platform.",
@@ -85,5 +239,174 @@
       "manifest-v3"
     ],
     "language": "JavaScript"
+  },
+  {
+    "id": 895163153,
+    "name": "CryptoCurrency_OQS",
+    "description": "This repository contains the key generation of cryptocurrency keys and wallet address using the OQS libraries, specifically the \"Dilithium2\" signature scheme.",
+    "html_url": "https://github.com/AlvinManojAlex/CryptoCurrency_OQS",
+    "created_at": "2024-11-27T17:11:39Z",
+    "topics": [
+      "dilithium",
+      "oqs",
+      "python"
+    ],
+    "language": "Python"
+  },
+  {
+    "id": 847864432,
+    "name": "Scheduled-Chrome-tabs",
+    "description": "A chrome extension, to open websites in new tabs at scheduled times. Mainly intended for users that do not close their chrome browsers and want to automatically open websites at various specific time.",
+    "html_url": "https://github.com/AlvinManojAlex/Scheduled-Chrome-tabs",
+    "created_at": "2024-08-26T17:35:16Z",
+    "topics": [
+      "chrome-extension",
+      "javascript",
+      "manifest-v3"
+    ],
+    "language": "JavaScript"
+  },
+  {
+    "id": 845185996,
+    "name": "B1-Shopping-List",
+    "description": "This repository contains the codebase for a web application that keeps track of a common shopping list shared by tenants of an apartment.",
+    "html_url": "https://github.com/AlvinManojAlex/B1-Shopping-List",
+    "created_at": "2024-08-20T18:47:20Z",
+    "topics": [
+      "firebase",
+      "react-router",
+      "reactjs",
+      "vercel-deployment"
+    ],
+    "language": "JavaScript"
+  },
+  {
+    "id": 824441944,
+    "name": "Money-Monitor",
+    "description": "This repository contains the codebase for my personal expense tracking web application called 'Money Monitor'.",
+    "html_url": "https://github.com/AlvinManojAlex/Money-Monitor",
+    "created_at": "2024-07-05T06:31:54Z",
+    "topics": [
+      "firebase",
+      "react-router",
+      "reactjs",
+      "recharts",
+      "vercel-deployment"
+    ],
+    "language": "JavaScript"
+  },
+  {
+    "id": 758016778,
+    "name": "Personal_Codeforces_Trainer",
+    "description": "This repository contains the script to suggest problems based on provided ratings. The questions will be chosen such that the person has not solved it previously, done with the help of the official Codeforces API.",
+    "html_url": "https://github.com/AlvinManojAlex/Personal_Codeforces_Trainer",
+    "created_at": "2024-02-15T13:10:56Z",
+    "topics": [
+      "codeforces",
+      "codeforces-api",
+      "python3"
+    ],
+    "language": "Python"
+  },
+  {
+    "id": 746528666,
+    "name": "Dementia-From-Speech",
+    "description": "Non-linguistic approach to predicting Alzheimer's disease",
+    "html_url": "https://github.com/AlvinManojAlex/Dementia-From-Speech",
+    "created_at": "2024-01-22T07:28:37Z",
+    "topics": [
+      "acoustic-features",
+      "audio-analysis",
+      "machine-learning",
+      "pre-trained-model"
+    ],
+    "language": "Jupyter Notebook"
+  },
+  {
+    "id": 737208143,
+    "name": "Productivity4YouTube",
+    "description": "This is a productivity-based chrome extension for YouTube that prompts the user, if they have completed their tasks for the day before binging YouTube.",
+    "html_url": "https://github.com/AlvinManojAlex/Productivity4YouTube",
+    "created_at": "2023-12-30T07:23:07Z",
+    "topics": [
+      "chrome-extension",
+      "javascript",
+      "manifest-v3"
+    ],
+    "language": "JavaScript"
+  },
+  {
+    "id": 703859380,
+    "name": "Travel-Recommender-System",
+    "description": "This repository contains our project for the course 'Web Mining', where we extract hotel data from Google Travel page for 51 cities in India after which we make a model that can recommend or suggest similar hotels.",
+    "html_url": "https://github.com/AlvinManojAlex/Travel-Recommender-System",
+    "created_at": "2023-10-12T04:09:03Z",
+    "topics": [
+      "machine-learning",
+      "python3",
+      "recommender-system",
+      "scraping-websites",
+      "selenium"
+    ],
+    "language": "Jupyter Notebook"
+  },
+  {
+    "id": 686252557,
+    "name": "Project_Euler",
+    "description": "This repository contains solutions for the Project Euler archives for math and algorithmic programs which are provided by Free Code Camp",
+    "html_url": "https://github.com/AlvinManojAlex/Project_Euler",
+    "created_at": "2023-09-02T07:07:38Z",
+    "topics": [
+      "algorithms",
+      "coding-challenge",
+      "freecodecamp-challenge",
+      "javascript",
+      "math"
+    ],
+    "language": "JavaScript"
+  },
+  {
+    "id": 662529487,
+    "name": "MStar-SAR",
+    "description": null,
+    "html_url": "https://github.com/AlvinManojAlex/MStar-SAR",
+    "created_at": "2023-07-05T10:27:33Z",
+    "topics": [
+      "densenet",
+      "efficientnetb0",
+      "googlenet",
+      "image-classification",
+      "pre-trained-models",
+      "resnet",
+      "sar",
+      "vgg16"
+    ],
+    "language": "Jupyter Notebook"
+  },
+  {
+    "id": 597112435,
+    "name": "NLP_Tamil_Hindi",
+    "description": "An NLP model that implements machine translation between Tamil and Hindi languages.",
+    "html_url": "https://github.com/AlvinManojAlex/NLP_Tamil_Hindi",
+    "created_at": "2023-02-03T16:52:48Z",
+    "topics": [
+      "language-model",
+      "neural-networks",
+      "nlp-machine-learning"
+    ],
+    "language": "Jupyter Notebook"
+  },
+  {
+    "id": 551537020,
+    "name": "Stock-Analytics",
+    "description": "Data Analytics project \"Stock Price Analytics using R\"",
+    "html_url": "https://github.com/AlvinManojAlex/Stock-Analytics",
+    "created_at": "2022-10-14T15:34:17Z",
+    "topics": [
+      "machine-learning",
+      "regression-models",
+      "stock-market"
+    ],
+    "language": "R"
   }
 ]
