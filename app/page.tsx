@@ -21,6 +21,9 @@ function formatProjectName(name: string): string {
     .join(' ');
 }
 
+// topics used by fewer than this many projects are hidden by default in the dropdown
+const TOPIC_VISIBILITY_THRESHOLD = 2;
+
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -29,6 +32,7 @@ export default function Home() {
   const [activeTopics, setActiveTopics] = useState<string[]>([]);
   const [topicQuery, setTopicQuery] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showAllTopics, setShowAllTopics] = useState(false);
   const comboRef = useRef<HTMLDivElement>(null);
 
   // useState variables for checking overflow of project description
@@ -70,17 +74,40 @@ export default function Home() {
     );
   }
 
-  const allTopics = Array.from(
-    new Set(projects.flatMap(p => p.topics || []))
-  ).filter(t => t !== 'featured').sort();
+  const topicCounts = new Map<string, number>();
+  projects.forEach(p => {
+    (p.topics || []).forEach(t => {
+      if (t === 'featured') return;
+      topicCounts.set(t, (topicCounts.get(t) ?? 0) + 1);
+    });
+  });
+
+  const allTopics = Array.from(topicCounts.keys()).sort((a, b) => {
+    const diff = (topicCounts.get(b) ?? 0) - (topicCounts.get(a) ?? 0);
+    return diff !== 0 ? diff : a.localeCompare(b);
+  });
+
+  const frequentTopics = allTopics.filter(
+    t => (topicCounts.get(t) ?? 0) >= TOPIC_VISIBILITY_THRESHOLD
+  );
 
   const visibleProjects = activeTopics.length === 0
     ? projects.filter(p => p.topics?.includes('featured'))
     : projects.filter(p => p.topics?.some(t => activeTopics.includes(t)));
 
-  const filteredTopics = allTopics.filter(
-    t => !activeTopics.includes(t) && t.toLowerCase().includes(topicQuery.toLowerCase())
+  const trimmedQuery = topicQuery.trim().toLowerCase();
+
+  // active search always spans every topic, ignoring the visibility threshold
+  const topicsToSearch = trimmedQuery || showAllTopics ? allTopics : frequentTopics;
+
+  const filteredTopics = topicsToSearch.filter(
+    t => !activeTopics.includes(t) && t.toLowerCase().includes(trimmedQuery)
   );
+
+  // rare topics currently hidden from the default list (excludes already-active chips)
+  const hiddenRareTopicsCount = allTopics.filter(
+    t => !activeTopics.includes(t) && (topicCounts.get(t) ?? 0) < TOPIC_VISIBILITY_THRESHOLD
+  ).length;
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -269,7 +296,7 @@ export default function Home() {
                 />
               </div>
 
-              {dropdownOpen && filteredTopics.length > 0 && (
+              {dropdownOpen && (filteredTopics.length > 0 || (!trimmedQuery && hiddenRareTopicsCount > 0)) && (
                 <div className="absolute z-10 mt-1 w-full max-h-56 overflow-y-auto rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-sm">
                   {filteredTopics.map(topic => (
                     <button
@@ -279,11 +306,23 @@ export default function Home() {
                         setTopicQuery('');
                         setDropdownOpen(false);
                       }}
-                      className="block w-full text-left text-xs uppercase tracking-wider px-4 py-2 text-zinc-600 dark:text-zinc-400 hover:bg-stone-50 dark:hover:bg-zinc-800 transition-colors"
+                      className="flex items-center justify-between gap-2 w-full text-left text-xs uppercase tracking-wider px-4 py-2 text-zinc-600 dark:text-zinc-400 hover:bg-stone-50 dark:hover:bg-zinc-800 transition-colors"
                     >
-                      {topic}
+                      <span>{topic}</span>
+                      <span className="text-zinc-400 dark:text-zinc-500 normal-case tracking-normal">
+                        {topicCounts.get(topic) ?? 0}
+                      </span>
                     </button>
                   ))}
+
+                  {!trimmedQuery && hiddenRareTopicsCount > 0 && (
+                    <button
+                      onClick={() => setShowAllTopics(prev => !prev)}
+                      className="sticky bottom-0 block w-full text-center text-xs uppercase tracking-wider px-4 py-2 border-t border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+                    >
+                      {showAllTopics ? 'Show fewer topics' : `Show all topics (+${hiddenRareTopicsCount})`}
+                    </button>
+                  )}
                 </div>
               )}
             </div>
