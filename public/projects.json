@@ -51,6 +51,22 @@
     "language": "TypeScript"
   },
   {
+    "id": 1254798396,
+    "name": "Meeting-To-Actions",
+    "description": "This is an AI-powered workflow automation platform that converts meeting transcripts into structured execution plans. It identifies action items, owners, deadlines, risks, and dependencies, then integrates with tools like Jira and Slack to automate project coordination and follow-up.",
+    "html_url": "https://github.com/AlvinManojAlex/Meeting-To-Actions",
+    "created_at": "2026-05-31T02:40:51Z",
+    "topics": [
+      "ai",
+      "fastapi",
+      "featured",
+      "litellm",
+      "pydantic-v2",
+      "python"
+    ],
+    "language": "Python"
+  },
+  {
     "id": 1227447699,
     "name": "SBSE_Project",
     "description": "This project focuses on automating and optimizing the task of codebase refactoring and cleanup, which is a time consuming software engineering activity.",
@@ -169,7 +185,7 @@
     "topics": [
       "featured",
       "linux",
-      "python3",
+      "python",
       "sbom",
       "strace"
     ],
@@ -221,7 +237,7 @@
     "topics": [
       "llm-hallucination",
       "poc",
-      "python3"
+      "python"
     ],
     "language": "Python"
   },
@@ -304,7 +320,7 @@
     "topics": [
       "codeforces",
       "codeforces-api",
-      "python3"
+      "python"
     ],
     "language": "Python"
   },
@@ -343,7 +359,7 @@
     "created_at": "2023-10-12T04:09:03Z",
     "topics": [
       "machine-learning",
-      "python3",
+      "python",
       "recommender-system",
       "scraping-websites",
       "selenium"
