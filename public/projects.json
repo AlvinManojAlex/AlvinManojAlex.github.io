@@ -1,5 +1,17 @@
 [
   {
+    "id": 1299958345,
+    "name": "Leet-Pulse",
+    "description": "A Chrome extension that quietly tracks LeetCode activity for a custom watchlist of usernames. Add any LeetCode profile, and the extension polls hourly in the background, surfacing a simple activity feed.",
+    "html_url": "https://github.com/AlvinManojAlex/Leet-Pulse",
+    "created_at": "2026-07-14T03:20:59Z",
+    "topics": [
+      "javascript",
+      "manifest-v3"
+    ],
+    "language": "JavaScript"
+  },
+  {
     "id": 1284532740,
     "name": "Pulse-x-ABI-Hackathon",
     "description": "A rule-based pipeline that decides which skilled-nursing-facility patients are billable to Medicare Part B for wound care, extracting wound details from clinical notes and assessments, and routing each patient to auto-accept, flag for review, or reject with a plain-English reason.",
