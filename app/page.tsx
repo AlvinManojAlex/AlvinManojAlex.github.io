@@ -308,12 +308,12 @@ export default function Home() {
           className="sticky top-0 z-40 border-y border-zinc-200 dark:border-zinc-800 bg-stone-50/80 dark:bg-zinc-950/80 backdrop-blur-md"
         >
           <div className="max-w-5xl mx-auto px-6 md:px-12 lg:px-16 h-14 md:h-16 flex items-center gap-4">
+            {/* name is dropped below sm - the links get the room instead */}
             <a
               href="#home"
-              className="shrink-0 text-sm md:text-base font-light tracking-tight text-zinc-900 dark:text-zinc-50 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300"
+              className="hidden sm:inline shrink-0 text-sm md:text-base font-light tracking-tight text-zinc-900 dark:text-zinc-50 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300"
             >
-              <span className="sm:hidden">AMA</span>
-              <span className="hidden sm:inline">Alvin Manoj Alex</span>
+              Alvin Manoj Alex
             </a>
             <div className="flex-1 min-w-0 overflow-x-auto no-scrollbar">
               {/* left-aligned below md so an overflowing row scrolls right instead of spilling off the left edge */}
