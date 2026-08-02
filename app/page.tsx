@@ -24,6 +24,39 @@ function formatProjectName(name: string): string {
 // topics used by fewer than this many projects are hidden by default in the dropdown
 const TOPIC_VISIBILITY_THRESHOLD = 2;
 
+// sections linked from both the hero row and the sticky navbar
+const NAV_LINKS = [
+  { id: 'about', label: 'About' },
+  { id: 'work', label: 'Work' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'contact', label: 'Contact' },
+];
+
+function ThemeToggle({ darkMode, onToggle, className = '' }: { darkMode: boolean; onToggle: () => void; className?: string }) {
+  return (
+    <button
+      onClick={onToggle}
+      aria-label="Toggle dark mode"
+      className={`w-10 h-10 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:border-zinc-400 dark:hover:border-zinc-500 transition-colors duration-300 ${className}`}
+    >
+      {darkMode ? (
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      ) : (
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      )}
+    </button>
+  );
+}
+
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -34,6 +67,14 @@ export default function Home() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showAllTopics, setShowAllTopics] = useState(false);
   const comboRef = useRef<HTMLDivElement>(null);
+
+  // the section shown in the tab panel below the navbar
+  const [activeSection, setActiveSection] = useState(NAV_LINKS[0].id);
+  // hero out of view => the sticky navbar is pinned, so the floating theme toggle steps aside
+  const [showNav, setShowNav] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const pendingScrollRef = useRef(false);
 
   // useState variables for checking overflow of project description
   const [expanded, setExpanded] = useState<Record<number, boolean>>({});
@@ -119,6 +160,66 @@ export default function Home() {
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
+  // reveal the navbar once the hero is fully out of view
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowNav(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
+
+  // open the section named in the URL hash, on load and on back/forward
+  useEffect(() => {
+    function applyHash() {
+      const id = window.location.hash.slice(1);
+      if (!NAV_LINKS.some(link => link.id === id)) return;
+      pendingScrollRef.current = true;
+      setActiveSection(id);
+    }
+
+    applyHash();
+    window.addEventListener('hashchange', applyHash);
+    window.addEventListener('popstate', applyHash);
+    return () => {
+      window.removeEventListener('hashchange', applyHash);
+      window.removeEventListener('popstate', applyHash);
+    };
+  }, []);
+
+  // once the newly selected section has rendered, bring the navbar to the top of the viewport
+  useEffect(() => {
+    if (!pendingScrollRef.current) return;
+    pendingScrollRef.current = false;
+    scrollToTabs();
+  }, [activeSection]);
+
+  function scrollToTabs() {
+    const tabs = tabsRef.current;
+    if (tabs) window.scrollTo({ top: tabs.offsetTop, behavior: 'smooth' });
+  }
+
+  // nav + hero links pick a section instead of scrolling to it
+  function selectSection(e: React.MouseEvent, id: string) {
+    e.preventDefault();
+
+    if (window.location.hash !== `#${id}`) {
+      window.history.pushState(null, '', `#${id}`);
+    }
+
+    if (id === activeSection) {
+      scrollToTabs(); // already open - just bring it into view
+      return;
+    }
+
+    pendingScrollRef.current = true;
+    setActiveSection(id);
+  }
+
   useEffect(() => {
     const newOverflow: Record<number, boolean> = {};
 
@@ -142,33 +243,18 @@ export default function Home() {
     });
 
     setIsOverflowing(newOverflow);
-  }, [projects]);
+    // hidden tab panels measure as zero-height, so re-measure whenever Work is reopened
+  }, [projects, activeSection]);
 
   return (
     <div className="min-h-screen bg-stone-50 dark:bg-zinc-950 transition-colors duration-300">
-      {/* Dark mode toggle */}
-      <button
-        onClick={toggleDarkMode}
-        aria-label="Toggle dark mode"
-        className="fixed top-5 right-5 z-50 w-10 h-10 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:border-zinc-400 dark:hover:border-zinc-500 transition-colors duration-300 shadow-sm"
-      >
-        {darkMode ? (
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="5"/>
-            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-          </svg>
-        ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
-        )}
-      </button>
+      {/* Dark mode toggle - floats over the hero, fades out once the navbar takes over */}
+      <div className={`fixed top-5 right-5 z-50 transition-opacity duration-300 ${showNav ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+        <ThemeToggle darkMode={darkMode} onToggle={toggleDarkMode} className="shadow-sm" />
+      </div>
 
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-center px-6 md:px-12 lg:px-16">
+      <section id="home" ref={heroRef} className="min-h-screen flex items-center justify-center px-6 md:px-12 lg:px-16">
         <div className="max-w-5xl w-full">
           <div className={`transition-all duration-1000 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8 md:gap-12">
@@ -200,18 +286,64 @@ export default function Home() {
           
           <div className={`mt-16 transition-all duration-1000 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="flex gap-6 md:gap-8 text-sm tracking-wide justify-center md:justify-start">
-              <a href="#about" className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300">About</a>
-              <a href="#work" className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300">Work</a>
-              <a href="#skills" className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300">Skills</a>
-              <a href="#experience" className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300">Experience</a>
-              <a href="#contact" className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300">Contact</a>
+              {NAV_LINKS.map(({ id, label }) => (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  onClick={(e) => selectSection(e, id)}
+                  className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300"
+                >
+                  {label}
+                </a>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
+      {/* Section switcher - the navbar pins to the top and swaps the panel below it */}
+      <div ref={tabsRef}>
+        <nav
+          aria-label="Primary"
+          className="sticky top-0 z-40 border-y border-zinc-200 dark:border-zinc-800 bg-stone-50/80 dark:bg-zinc-950/80 backdrop-blur-md"
+        >
+          <div className="max-w-5xl mx-auto px-6 md:px-12 lg:px-16 h-14 md:h-16 flex items-center gap-4">
+            <a
+              href="#home"
+              className="shrink-0 text-sm md:text-base font-light tracking-tight text-zinc-900 dark:text-zinc-50 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300"
+            >
+              <span className="sm:hidden">AMA</span>
+              <span className="hidden sm:inline">Alvin Manoj Alex</span>
+            </a>
+            <div className="flex-1 min-w-0 overflow-x-auto no-scrollbar">
+              {/* left-aligned below md so an overflowing row scrolls right instead of spilling off the left edge */}
+              <div className="flex justify-start md:justify-end gap-4 md:gap-8 text-xs md:text-sm tracking-wide whitespace-nowrap">
+                {NAV_LINKS.map(({ id, label }) => (
+                  <a
+                    key={id}
+                    href={`#${id}`}
+                    onClick={(e) => selectSection(e, id)}
+                    aria-current={activeSection === id ? 'page' : undefined}
+                    className={`shrink-0 pb-0.5 border-b transition-colors duration-300 ${
+                      activeSection === id
+                        ? 'text-zinc-900 dark:text-zinc-100 border-current'
+                        : 'text-zinc-500 dark:text-zinc-400 border-transparent hover:text-zinc-900 dark:hover:text-zinc-100'
+                    }`}
+                  >
+                    {label}
+                  </a>
+                ))}
+              </div>
+            </div>
+            <ThemeToggle darkMode={darkMode} onToggle={toggleDarkMode} className="shrink-0" />
+          </div>
+        </nav>
+
+        {/* Only the selected section is displayed; the rest stay mounted but hidden */}
+        <div className="min-h-[calc(100vh-3.5rem)] md:min-h-[calc(100vh-4rem)]">
+
       {/* About Section */}
-      <section id="about" className="py-16 md:py-32 px-6 md:px-12 lg:px-16 border-t border-zinc-200 dark:border-zinc-800">
+      <section id="about" hidden={activeSection !== 'about'} className="section-panel py-16 md:py-32 px-6 md:px-12 lg:px-16">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-8 md:mb-12">About</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 md:gap-16">
@@ -238,7 +370,7 @@ export default function Home() {
       </section>
 
       {/* Projects Section */}
-      <section id="work" className="py-16 md:py-32 px-6 md:px-12 bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800">
+      <section id="work" hidden={activeSection !== 'work'} className="section-panel py-16 md:py-32 px-6 md:px-12 bg-white dark:bg-zinc-900">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-10 md:mb-16">Selected Work</h2>
 
@@ -410,7 +542,7 @@ export default function Home() {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-16 md:py-32 px-6 md:px-12 lg:px-16 border-t border-zinc-200 dark:border-zinc-800">
+      <section id="skills" hidden={activeSection !== 'skills'} className="section-panel py-16 md:py-32 px-6 md:px-12 lg:px-16">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-10 md:mb-16">Skills & Technologies</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-16">
@@ -481,7 +613,7 @@ export default function Home() {
       </section>
       
       {/* Experience section */}
-      <section id="experience" className="py-16 md:py-32 px-6 md:px-12 lg:px-16 bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800">
+      <section id="experience" hidden={activeSection !== 'experience'} className="section-panel py-16 md:py-32 px-6 md:px-12 lg:px-16 bg-white dark:bg-zinc-900">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-10 md:mb-16">Experience</h2>
           <div className="space-y-14 md:space-y-24">
@@ -544,7 +676,7 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-16 md:py-32 px-6 md:px-12 lg:px-16 border-t border-zinc-200 dark:border-zinc-800">
+      <section id="contact" hidden={activeSection !== 'contact'} className="section-panel py-16 md:py-32 px-6 md:px-12 lg:px-16">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-10 md:mb-16">Get In Touch</h2>
           <div className="space-y-8 md:space-y-12">
@@ -581,6 +713,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+        </div>
+      </div>
 
       {/* Footer */}
       <footer className="py-10 px-6 md:px-12 lg:px-16 border-t bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
