@@ -321,35 +321,38 @@ export default function Home() {
           aria-label="Primary"
           className="sticky top-0 z-40 border-y border-zinc-200 dark:border-zinc-800 bg-stone-50/80 dark:bg-zinc-950/80 backdrop-blur-md"
         >
-          <div className="max-w-5xl mx-auto px-6 md:px-12 lg:px-16 h-14 md:h-16 flex items-center gap-4">
-            {/* name is dropped below sm - the links get the room instead */}
-            <a
-              href="#home"
-              className="hidden sm:inline shrink-0 text-sm md:text-base font-light tracking-tight text-zinc-900 dark:text-zinc-50 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300"
-            >
-              Alvin Manoj Alex
-            </a>
-            <div className="flex-1 min-w-0 overflow-x-auto no-scrollbar">
-              {/* left-aligned below md so an overflowing row scrolls right instead of spilling off the left edge */}
-              <div className="flex justify-start md:justify-end gap-4 md:gap-8 text-xs md:text-sm tracking-wide whitespace-nowrap">
-                {NAV_LINKS.map(({ id, label }) => (
-                  <a
-                    key={id}
-                    href={`#${id}`}
-                    onClick={(e) => selectSection(e, id)}
-                    aria-current={activeSection === id ? 'page' : undefined}
-                    className={`shrink-0 pb-0.5 border-b transition-colors duration-300 ${
-                      activeSection === id
-                        ? 'text-zinc-900 dark:text-zinc-100 border-current'
-                        : 'text-zinc-500 dark:text-zinc-400 border-transparent hover:text-zinc-900 dark:hover:text-zinc-100'
-                    }`}
-                  >
-                    {label}
-                  </a>
-                ))}
+          {/* padding outside the max-width, same as the section panels, so the row lines up with their content */}
+          <div className="px-6 md:px-12 lg:px-16">
+            <div className="max-w-5xl mx-auto h-14 md:h-16 flex items-center gap-4">
+              {/* name is dropped below sm - the links get the room instead */}
+              <a
+                href="#home"
+                className="hidden sm:inline shrink-0 text-sm md:text-base font-light tracking-tight text-zinc-900 dark:text-zinc-50 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-300"
+              >
+                Alvin Manoj Alex
+              </a>
+              <div className="flex-1 min-w-0 overflow-x-auto no-scrollbar">
+                {/* left-aligned below md so an overflowing row scrolls right instead of spilling off the left edge */}
+                <div className="flex justify-start md:justify-end gap-4 md:gap-8 text-xs md:text-sm tracking-wide whitespace-nowrap">
+                  {NAV_LINKS.map(({ id, label }) => (
+                    <a
+                      key={id}
+                      href={`#${id}`}
+                      onClick={(e) => selectSection(e, id)}
+                      aria-current={activeSection === id ? 'page' : undefined}
+                      className={`shrink-0 pb-0.5 border-b transition-colors duration-300 ${
+                        activeSection === id
+                          ? 'text-zinc-900 dark:text-zinc-100 border-current'
+                          : 'text-zinc-500 dark:text-zinc-400 border-transparent hover:text-zinc-900 dark:hover:text-zinc-100'
+                      }`}
+                    >
+                      {label}
+                    </a>
+                  ))}
+                </div>
               </div>
+              <ThemeToggle darkMode={darkMode} onToggle={toggleDarkMode} className="shrink-0 ml-1 md:ml-6" />
             </div>
-            <ThemeToggle darkMode={darkMode} onToggle={toggleDarkMode} className="shrink-0" />
           </div>
         </nav>
 
