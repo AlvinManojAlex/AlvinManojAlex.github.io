@@ -70,9 +70,11 @@ export default function Home() {
 
   // the section shown in the tab panel below the navbar
   const [activeSection, setActiveSection] = useState(NAV_LINKS[0].id);
-  // hero out of view => the sticky navbar is pinned, so the floating theme toggle steps aside
+  // navbar on screen => the hero's own link row and floating theme toggle step aside
   const [showNav, setShowNav] = useState(false);
-  const heroRef = useRef<HTMLElement>(null);
+  // after the first scroll the hero links swap on the slow entrance timing for a quick fade
+  const [navSeen, setNavSeen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
   const pendingScrollRef = useRef(false);
 
@@ -160,16 +162,21 @@ export default function Home() {
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
-  // reveal the navbar once the hero is fully out of view
+  // the navbar duplicates the hero's links, so hide those as soon as it scrolls into view
   useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
+    const nav = navRef.current;
+    if (!nav) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => setShowNav(!entry.isIntersecting),
-      { threshold: 0 }
+      ([entry]) => {
+        setShowNav(entry.isIntersecting);
+        if (entry.isIntersecting) setNavSeen(true);
+      },
+      // the navbar starts flush with the bottom of the viewport, so require a real
+      // sliver of it on screen before treating it as visible
+      { threshold: 0, rootMargin: '0px 0px -96px 0px' }
     );
-    observer.observe(hero);
+    observer.observe(nav);
     return () => observer.disconnect();
   }, []);
 
@@ -254,7 +261,7 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section id="home" ref={heroRef} className="min-h-screen flex items-center justify-center px-6 md:px-12 lg:px-16">
+      <section id="home" className="min-h-screen flex items-center justify-center px-6 md:px-12 lg:px-16">
         <div className="max-w-5xl w-full">
           <div className={`transition-all duration-1000 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8 md:gap-12">
@@ -284,7 +291,13 @@ export default function Home() {
             </div>
           </div>
           
-          <div className={`mt-16 transition-all duration-1000 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          {/* hero links fade out once the navbar - which carries the same links - is on screen */}
+          <div
+            aria-hidden={showNav}
+            className={`mt-16 transition-all ${navSeen ? 'duration-300' : 'duration-1000 delay-300'} ${
+              mounted && !showNav ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'
+            }`}
+          >
             <div className="flex gap-6 md:gap-8 text-sm tracking-wide justify-center md:justify-start">
               {NAV_LINKS.map(({ id, label }) => (
                 <a
@@ -304,6 +317,7 @@ export default function Home() {
       {/* Section switcher - the navbar pins to the top and swaps the panel below it */}
       <div ref={tabsRef}>
         <nav
+          ref={navRef}
           aria-label="Primary"
           className="sticky top-0 z-40 border-y border-zinc-200 dark:border-zinc-800 bg-stone-50/80 dark:bg-zinc-950/80 backdrop-blur-md"
         >
