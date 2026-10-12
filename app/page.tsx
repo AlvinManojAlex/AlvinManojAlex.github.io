@@ -411,23 +411,20 @@ export default function Home() {
           <div className="space-y-14 md:space-y-24">
                 {[
                   {
-                    company: "FinDi Ltd.",
-                    role: "Software Engineer",
-                    period: "Jul 2026 - Present",
+                    company: "Palo Alto Networks",
+                    role: "Technical Support Engineer",
+                    period: "Oct 2026 - Present",
                     description: [
-                      "Built and configured Firebase cloud infrastructure to support QA testing and development workflows, providing a dedicated environment for application validation.",
-                      "Developed a backend feature integrating the Plaid API to retrieve up to two years of user transaction history, calculate historical averages and baseline metrics, and persist results in Firestore for frontend consumption.",
-                      "Diagnosed and fixed a backend issue causing timeouts during Plaid API user-data extraction, improving reliability of a critical external API integration.",
-                      "Investigated and resolved a backend logging failure caused by cyclic logger calls, eliminating recursive stack overflows and restoring application logging functionality."
                     ]
                   },
                   {
-                    company: "MABANEE",
-                    role: "Software Engineer Intern",
-                    period: "Dec 2025 - Jan 2026",
+                    company: "FinDi Ltd.",
+                    role: "Software Engineer",
+                    period: "Jul 2026 - Oct 2026",
                     description: [
-                      "Diagnosed and fixed production bugs in an internal workforce attendance system, including resolving ISO year date format causing SQL data inconsistencies.",
-                      "Identified and fixed improper HTTP request types sent to an Oracle Fusion servlet through targeted testing and log analysis, restoring correct backend communication and application functionality."
+                      "Built and configured Firebase cloud infrastructure to support QA testing and development workflows, providing a dedicated environment for application validation.",
+                      "Developed a backend feature integrating the Plaid API to fetch user financial data and compute key business metrics, persisting results in Firestore for frontend consumption.",
+                      "Diagnosed and fixed a backend issue causing timeouts during Plaid API user-data extraction, improving reliability of a critical external API integration."
                     ]
                   },
                   {
