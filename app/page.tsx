@@ -393,7 +393,7 @@ export default function Home() {
             <div className="flex flex-row md:flex-col gap-8 md:space-y-8">
               <div>
                 <h3 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-2 md:mb-3 pt-8 md:pt-0">Location</h3>
-                <p className="text-base md:text-lg text-zinc-900 dark:text-zinc-100">New York City, NY</p>
+                <p className="text-base md:text-lg text-zinc-900 dark:text-zinc-100">Santa Clara, CA</p>
               </div>
               <div>
                 <h3 className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-2 md:mb-3 pt-8 md:pt-0">Experience</h3>
